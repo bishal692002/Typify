@@ -142,6 +142,14 @@ function endTest() {
     
     // Calculate final statistics
     calculateWPM();
+    
+    // Add message display
+    const message = getScoreMessage(wpm);
+    const messageElement = document.createElement('div');
+    messageElement.className = 'score-message';
+    messageElement.textContent = message;
+    textDisplay.innerHTML = '';
+    textDisplay.appendChild(messageElement);
 }
 
 // Calculate words per minute
@@ -174,6 +182,21 @@ function updateCaret() {
         caret.style.left = `${rect.left - testRect.left}px`;
         caret.style.top = `${rect.top - testRect.top}px`;
     }
+}
+
+// Add this function after the existing code but before the event listeners
+function getScoreMessage(wpm) {
+    if (wpm === 0) return "Hey, at least you tried! 🐌";
+    if (wpm < 20) return "Slow and steady wins the race! 🐢";
+    if (wpm < 30) return "Getting warmed up! ☕";
+    if (wpm < 40) return "Not bad, you're getting there! 🌱";
+    if (wpm < 50) return "Pretty good! You type faster than a sleepy cat! 😺";
+    if (wpm < 60) return "Now we're talking! You're cooking! 🔥";
+    if (wpm < 70) return "Impressive! Your fingers are dancing! 💃";
+    if (wpm < 80) return "Fantastic! You're faster than a caffeinated squirrel! 🐿️";
+    if (wpm < 90) return "Amazing! Your keyboard is smoking! 🚀";
+    if (wpm < 100) return "Incredible! Are you even human?! 🤖";
+    return "IMPOSSIBLE! You must be a typing wizard! 🧙‍♂️✨";
 }
 
 // Event Listeners
