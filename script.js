@@ -1,6 +1,9 @@
-// Word lists for random text generation
+/**
+ * Core word list for text generation
+ * Common English words sorted by frequency of usage
+ */
 const commonWords = [
-    "the", "be", "to", "of", "and", "a", "in", "that", "have", "I", 
+    "the", "be", "to", "of", "and", "a", "in", "that", "have", "i", 
     "it", "for", "not", "on", "with", "he", "as", "you", "do", "at", 
     "this", "but", "his", "by", "from", "they", "we", "say", "her", "she", 
     "or", "an", "will", "my", "one", "all", "would", "there", "their", "what", 
@@ -12,7 +15,9 @@ const commonWords = [
     "even", "new", "want", "because", "any", "these", "give", "day", "most", "us"
 ];
 
-// DOM Elements
+/**
+ * DOM Element References
+ */
 const textDisplay = document.querySelector('.text-display');
 const textInput = document.querySelector('.text-input');
 const counter = document.querySelector('.counter');
@@ -25,7 +30,9 @@ const testArea = document.querySelector('.test-area');
 const focusMessage = document.querySelector('.focus-message');
 const caret = document.querySelector('.caret');
 
-// Variables
+/**
+ * State Management Variables
+ */
 let timer;
 let timeLeft;
 let testActive = false;
@@ -36,7 +43,10 @@ let selectedTime = parseInt(timeOptions.value);
 let testText = [];
 let typedEntries = 0;
 
-// Initialize the test
+/**
+ * Initializes the typing test environment
+ * Resets all metrics and generates new test content
+ */
 function initTest() {
     clearInterval(timer);
     testActive = false;
@@ -65,7 +75,10 @@ function initTest() {
     textInput.value = '';
 }
 
-// Generate random text
+/**
+ * Generates random text for the typing test
+ * Creates an array of 100 randomly selected common words
+ */
 function generateRandomText() {
     testText = [];
     // Generate about 100 words (more than enough for most tests)
@@ -74,40 +87,45 @@ function generateRandomText() {
     }
 }
 
-// Display text for typing test
+/**
+ * Renders the test text to the display area
+ * Creates character spans for individual tracking
+ */
 function displayText() {
     textDisplay.innerHTML = '';
     testText.forEach((word, wordIndex) => {
         const wordSpan = document.createElement('span');
         wordSpan.className = 'word';
         
-        // Add each character of the word
-        Array.from(word).forEach((char, charIdx) => {
+        Array.from(word).forEach(char => {
             const charSpan = document.createElement('span');
             charSpan.textContent = char;
             charSpan.className = 'char';
             wordSpan.appendChild(charSpan);
         });
         
-        // Add space after word
+        // Add space after word except for last word
         if (wordIndex < testText.length - 1) {
             const spaceSpan = document.createElement('span');
             spaceSpan.textContent = ' ';
-            spaceSpan.className = 'char';
+            spaceSpan.className = 'char space';
             wordSpan.appendChild(spaceSpan);
         }
         
         textDisplay.appendChild(wordSpan);
     });
 
-    // Highlight the first character
+    // Highlight first character
     const firstChar = textDisplay.querySelector('.char');
     if (firstChar) {
         firstChar.classList.add('active');
+        updateCaret();
     }
 }
 
-// Start the test
+/**
+ * Initiates the typing test timer and tracking
+ */
 function startTest() {
     if (!testActive) {
         testActive = true;
@@ -128,7 +146,10 @@ function startTest() {
     }
 }
 
-// End the test
+/**
+ * Concludes the typing test and displays results
+ * Calculates final statistics and shows performance message
+ */
 function endTest() {
     clearInterval(timer);
     testActive = false;
@@ -152,7 +173,10 @@ function endTest() {
     textDisplay.appendChild(messageElement);
 }
 
-// Calculate words per minute
+/**
+ * Calculates typing metrics (WPM, accuracy, character count)
+ * Uses standard WPM calculation: (characters typed / 5) / minutes
+ */
 function calculateWPM() {
     // Standard calculation: (characters typed / 5) / time in minutes
     const timeElapsed = (selectedTime - timeLeft) / 60; // Convert to minutes
@@ -172,7 +196,10 @@ function calculateWPM() {
     }
 }
 
-// Update caret position
+/**
+ * Updates the caret position to match the current character
+ * Handles visual tracking of typing position
+ */
 function updateCaret() {
     const activeChar = textDisplay.querySelector('.active');
     if (activeChar) {
@@ -184,7 +211,11 @@ function updateCaret() {
     }
 }
 
-// Add this function after the existing code but before the event listeners
+/**
+ * Generates performance feedback message based on WPM score
+ * @param {number} wpm - Words per minute score
+ * @returns {string} Motivational message with emoji
+ */
 function getScoreMessage(wpm) {
     if (wpm === 0) return "Hey, at least you tried! 🐌";
     if (wpm < 20) return "Slow and steady wins the race! 🐢";
@@ -199,41 +230,74 @@ function getScoreMessage(wpm) {
     return "IMPOSSIBLE! You must be a typing wizard! 🧙‍♂️✨";
 }
 
-// Event Listeners
+/**
+ * Event Listeners
+ */
 textInput.addEventListener('input', e => {
-    const typedChar = e.target.value;
-    e.target.value = ''; // Clear input after each character
+    const inputValue = e.target.value;
+    const allChars = textDisplay.querySelectorAll('.char');
     
-    if (!testActive && typedChar.length > 0) {
+    // Handle backspace
+    if (e.inputType === 'deleteContentBackward') {
+        if (charIndex > 0) {
+            charIndex--;
+            typedEntries--;
+            
+            // Remove classes from current character
+            allChars[charIndex].classList.remove('correct', 'incorrect');
+            allChars[charIndex].classList.add('active');
+            
+            // Remove classes from next character if it exists
+            if (allChars[charIndex + 1]) {
+                allChars[charIndex + 1].classList.remove('active');
+            }
+            
+            // Update mistakes count if needed
+            if (allChars[charIndex].classList.contains('incorrect')) {
+                mistakes--;
+                calculateWPM();
+            }
+            
+            updateCaret();
+        }
+        e.target.value = '';
+        return;
+    }
+
+    // Handle regular input
+    if (!testActive && inputValue.length > 0) {
         startTest();
     }
 
-    if (testActive) {
-        const allChars = textDisplay.querySelectorAll('.char');
+    if (testActive && charIndex < allChars.length) {
+        const typedChar = inputValue[inputValue.length - 1];
+        const currentChar = allChars[charIndex].textContent;
+        
+        typedEntries++;
+        
+        // Check character match
+        if (typedChar === currentChar) {
+            allChars[charIndex].classList.add('correct');
+        } else {
+            allChars[charIndex].classList.add('incorrect');
+            mistakes++;
+        }
+        
+        // Move to next character
+        allChars[charIndex].classList.remove('active');
+        charIndex++;
         
         if (charIndex < allChars.length) {
-            typedEntries++;
-            
-            // Check if typed character matches current character
-            if (typedChar === allChars[charIndex].textContent) {
-                allChars[charIndex].classList.add('correct');
-            } else {
-                allChars[charIndex].classList.add('incorrect');
-                mistakes++;
-            }
-            
-            // Move to next character
-            allChars[charIndex].classList.remove('active');
-            charIndex++;
-            
-            if (charIndex < allChars.length) {
-                allChars[charIndex].classList.add('active');
-                updateCaret();
-            }
+            allChars[charIndex].classList.add('active');
+            updateCaret();
         }
+        
+        calculateWPM();
+        e.target.value = '';
     }
 });
 
+// Additional event listeners
 testArea.addEventListener('click', () => {
     textInput.focus();
     if (!testActive) {
@@ -254,11 +318,13 @@ timeOptions.addEventListener('change', () => {
     initTest();
 });
 
-// Initialize on page load
+/**
+ * Initialization
+ */
 window.addEventListener('load', () => {
     initTest();
     textInput.focus();
 });
 
-// Update caret position on window resize
+// Handle responsive caret positioning
 window.addEventListener('resize', updateCaret);

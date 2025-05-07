@@ -1,11 +1,12 @@
 :root {
-    --bg-color: #2c4a1d;
-    --text-color: #f4d03f;
-    --caret-color: #f4d03f;
-    --text-inactive: #a8c995;
-    --text-correct: #7dce13;
+    --bg-color: #13111C;
+    --text-color: #ffffff;
+    --caret-color: #a78bfa;
+    --text-inactive: #6b7280;
+    --text-correct: #d8b4fe;
     --text-error: #ff6b6b;
-    --secondary-bg: #3c5a2d;
+    --secondary-bg: #1f1f38;
+    --accent-color: #8b5cf6;
     --font-primary: 'Roboto Mono', monospace;
 }
 
@@ -54,7 +55,7 @@ body {
 .time-options, .theme-options {
     padding: 0.5rem;
     background-color: var(--secondary-bg);
-    border: 2px solid var(--text-color);
+    border: 2px solid var(--accent-color);
     color: var(--text-color);
     border-radius: 4px;
     cursor: pointer;
@@ -62,10 +63,11 @@ body {
 
 .test-area {
     background-color: var(--secondary-bg);
-    border: 2px solid var(--text-color);
+    border: 2px solid var(--accent-color);
     border-radius: 8px;
     padding: 2rem;
     position: relative;
+    box-shadow: 0 0 10px rgba(139, 92, 246, 0.2);
 }
 
 .text-display {
@@ -73,6 +75,7 @@ body {
     line-height: 2.5rem;
     margin-bottom: 1rem;
     color: var(--text-inactive);
+    transition: all 0.2s ease;
 }
 
 .text-display span {
@@ -81,6 +84,8 @@ body {
 
 .text-display span.active {
     color: var(--text-color);
+    background-color: rgba(139, 92, 246, 0.2);
+    border-radius: 2px;
 }
 
 .text-display span.correct {
@@ -89,6 +94,35 @@ body {
 
 .text-display span.incorrect {
     color: var(--text-error);
+    background-color: rgba(255, 107, 107, 0.1);
+    border-radius: 2px;
+}
+
+.text-display span.word {
+    margin-right: 0.5rem;
+    display: inline-block;
+}
+
+.text-display span.char {
+    position: relative;
+    transition: all 0.2s ease;
+}
+
+.text-display span.char.active {
+    color: var(--text-color);
+    background-color: rgba(196, 167, 231, 0.2);
+    border-radius: 2px;
+    padding: 0 1px;
+}
+
+.text-display span.char.correct {
+    color: var(--text-correct);
+}
+
+.text-display span.char.incorrect {
+    color: var(--text-error);
+    background-color: rgba(235, 111, 146, 0.2);
+    border-radius: 2px;
 }
 
 .text-input {
@@ -98,8 +132,8 @@ body {
 
 .restart-btn {
     padding: 0.5rem 1rem;
-    background-color: var(--text-color);
-    color: var(--bg-color);
+    background-color: var(--accent-color);
+    color: var(--text-color);
     border: none;
     border-radius: 4px;
     font-weight: bold;
@@ -109,7 +143,7 @@ body {
 }
 
 .restart-btn:hover {
-    background-color: #dab10d;
+    background-color: #7c3aed;
     transform: scale(1.05);
     transition: all 0.2s ease;
 }
@@ -118,8 +152,9 @@ body {
     position: absolute;
     width: 2px;
     height: 2rem;
-    background-color: var(--caret-color);
+    background-color: var(--accent-color);
     animation: blink 1s infinite;
+    transition: all 0.1s ease;
     display: none;
 }
 
@@ -136,7 +171,7 @@ body {
 
 .stat-box {
     background-color: var(--secondary-bg);
-    border: 2px solid var(--text-color);
+    border: 2px solid var(--accent-color);
     padding: 1rem;
     border-radius: 4px;
     flex: 1;
@@ -188,4 +223,16 @@ body {
     .stats {
         flex-direction: column;
     }
+}
+
+/* Add subtle hover effects */
+.time-options:hover, .theme-options:hover {
+    border-color: var(--text-correct);
+    cursor: pointer;
+}
+
+/* Add glow effect to active element */
+.test-area:focus-within {
+    border-color: var(--accent-color);
+    box-shadow: 0 0 15px rgba(139, 92, 246, 0.3);
 }
