@@ -15,6 +15,9 @@
     --glass-border: rgba(255, 255, 255, 0.1);
     --active-word-bg: rgba(139, 92, 246, 0.15);
     --active-word-border: rgba(139, 92, 246, 0.3);
+    --font-mono: 'JetBrains Mono', monospace;
+    --font-display: 'Inter', system-ui, -apple-system, sans-serif;
+    --font-stats: 'Roboto', sans-serif;
 }
 
 /* Light theme colors */
@@ -40,7 +43,7 @@
 body {
     background-color: var(--bg-color);
     color: var(--text-color);
-    font-family: var(--font-primary);
+    font-family: var(--font-display);
     min-height: 100vh;
     margin: 0;
     display: flex;
@@ -138,8 +141,9 @@ input:checked + .slider:before {
     color: var(--text-color);
     border-radius: 1rem;
     cursor: pointer;
-    font-family: var(--font-primary);
+    font-family: var(--font-display);
     font-size: 1rem;
+    font-weight: 500;
     backdrop-filter: blur(10px);
     transition: all 0.3s ease;
 }
@@ -180,8 +184,10 @@ input:checked + .slider:before {
 }
 
 .text-display {
+    font-family: var(--font-mono);
     font-size: 1.4rem;
     line-height: 2.2rem;
+    font-weight: 400;
     margin-bottom: 1rem;
     color: var(--text-inactive);
     flex-grow: 1;
@@ -269,6 +275,7 @@ input:checked + .slider:before {
     text-align: center;
     backdrop-filter: blur(10px);
     transition: transform 0.3s ease;
+    font-family: var(--font-stats);
 }
 
 .stat-box:hover {
@@ -298,14 +305,20 @@ input:checked + .slider:before {
 }
 
 .stat-title {
+    font-family: var(--font-display);
     font-size: 0.9rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
     color: var(--text-inactive);
     margin-bottom: 0.25rem;
 }
 
 .stat-value {
+    font-family: var(--font-mono);
     font-size: 1.5rem;
-    font-weight: bold;
+    font-weight: 600;
+    letter-spacing: -0.02em;
     transition: all 0.3s ease;
 }
 
@@ -319,6 +332,8 @@ input:checked + .slider:before {
     position: absolute;
     top: 1rem;
     right: 1rem;
+    font-family: var(--font-mono);
+    font-weight: 600;
     font-size: 1.5rem;
 }
 
@@ -366,10 +381,11 @@ input:checked + .slider:before {
 }
 
 .subtitle {
+    font-family: var(--font-display);
     font-size: 1.8rem;
-    color: var(--accent-color);
     font-weight: 600;
-    letter-spacing: 0.5px;
+    letter-spacing: -0.02em;
+    color: var(--accent-color);
     margin: 0;
 }
 
@@ -453,14 +469,21 @@ input:checked + .slider:before {
 .history-section h3 {
     margin-bottom: 1rem;
     color: var(--text-color);
+    font-family: var(--font-display);
+    font-weight: 600;
+    letter-spacing: -0.01em;
 }
 
 .history-list {
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
+    font-family: var(--font-stats);
 }
 
 .history-list > * {
     animation: fadeIn 0.3s ease;
 }
+
+/* Add new font import */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;600&family=Roboto:wght@400;500;700&display=swap');
