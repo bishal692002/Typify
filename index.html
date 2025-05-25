@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,20 +8,25 @@
     <link rel="stylesheet" href="styles.css">
    
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
 </head>
 <body>
     <div class="container">
-        <div class="logo-section">
-            <img src="  logo.png" alt="Typify" class="logo">
-            <div class="header-text">
-                
+        <header>
+            <div class="logo-section">
+                <img src="logo.png" alt="Typify" class="logo">
                 <div class="subtitle">Let's Type!</div>
             </div>
-        </div>
-        <div class="header">
-            
+
             <div class="settings">
+                <div class="theme-toggle">
+                    <i class="fas fa-moon"></i>
+                    <label class="switch">
+                        <input type="checkbox" id="theme-switch">
+                        <span class="slider round"></span>
+                    </label>
+                    <i class="fas fa-sun"></i>
+                </div>
                 <select class="time-options">
                     <option value="15" selected>15s</option>
                     <option value="30">30s</option>
@@ -29,9 +34,10 @@
                     <option value="120">2m</option>
                 </select>
             </div>
-        </div>
+        </header>
 
-        <div class="test-area">
+        <main class="test-area">
+            <div class="progress-bar"></div>
             <div class="counter">15</div>
             <div class="text-display"></div>
             <input type="text" class="text-input" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
@@ -40,24 +46,29 @@
             <button class="restart-btn">
                 <i class="fas fa-redo"></i> Restart
             </button>
-        </div>
+        </main>
 
-        <div class="stats">
-            <div class="stat-box">
+        <section class="stats">
+            <div class="stat-box wpm-box" data-tooltip="Words Per Minute">
                 <div class="stat-title">WPM</div>
                 <div class="stat-value" id="wpm">0</div>
             </div>
-            <div class="stat-box">
+            <div class="stat-box accuracy-box" data-tooltip="Percentage of correctly typed characters">
                 <div class="stat-title">Accuracy</div>
                 <div class="stat-value" id="accuracy">100%</div>
             </div>
-            <div class="stat-box">
+            <div class="stat-box chars-box" data-tooltip="Correct/Total Characters">
                 <div class="stat-title">Characters</div>
                 <div class="stat-value" id="characters">0/0</div>
             </div>
-        </div>
+        </section>
+
+        <section class="history-section">
+            <h3>Recent Scores</h3>
+            <div class="history-list"></div>
+        </section>
     </div>
 
-   <script src="script.js"></script>
+    <script src="script.js"></script>
 </body>
 </html>

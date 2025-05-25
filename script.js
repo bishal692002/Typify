@@ -44,6 +44,69 @@ let testText = [];
 let typedEntries = 0;
 
 /**
+ * Theme Management
+ */
+const themeSwitch = document.getElementById('theme-switch');
+const htmlElement = document.documentElement;
+
+// Load saved theme preference
+const savedTheme = localStorage.getItem('theme') || 'dark';
+htmlElement.setAttribute('data-theme', savedTheme);
+themeSwitch.checked = savedTheme === 'light';
+
+// Theme toggle handler
+themeSwitch.addEventListener('change', () => {
+    const newTheme = themeSwitch.checked ? 'light' : 'dark';
+    htmlElement.setAttribute('data-theme', newTheme);
+    localStorage.setItem('theme', newTheme);
+});
+
+/**
+ * Score History Management
+ */
+const historyList = document.querySelector('.history-list');
+const MAX_HISTORY_ITEMS = 5;
+
+function saveScore(wpm, accuracy, characters) {
+    const scores = JSON.parse(localStorage.getItem('typing_scores') || '[]');
+    const newScore = {
+        wpm,
+        accuracy,
+        characters,
+        date: new Date().toISOString()
+    };
+    
+    scores.unshift(newScore);
+    if (scores.length > MAX_HISTORY_ITEMS) {
+        scores.pop();
+    }
+    
+    localStorage.setItem('typing_scores', JSON.stringify(scores));
+    updateHistoryDisplay();
+}
+
+function updateHistoryDisplay() {
+    const scores = JSON.parse(localStorage.getItem('typing_scores') || '[]');
+    historyList.innerHTML = scores.map(score => `
+        <div class="history-item">
+            <span>${score.wpm} WPM</span>
+            <span>${score.accuracy}% Accuracy</span>
+            <span>${new Date(score.date).toLocaleDateString()}</span>
+        </div>
+    `).join('');
+}
+
+/**
+ * Progress Bar Management
+ */
+const progressBar = document.querySelector('.progress-bar');
+
+function updateProgressBar() {
+    const progress = ((selectedTime - timeLeft) / selectedTime) * 100;
+    progressBar.style.width = `${progress}%`;
+}
+
+/**
  * Initializes the typing test environment
  * Resets all metrics and generates new test content
  */
@@ -73,6 +136,9 @@ function initTest() {
 
     // Reset input
     textInput.value = '';
+
+    progressBar.style.width = '0%';
+    updateHistoryDisplay();
 }
 
 /**
@@ -136,6 +202,9 @@ function startTest() {
             timeLeft--;
             counter.textContent = timeLeft;
             
+            // Update progress bar
+            updateProgressBar();
+            
             // Calculate WPM in real-time
             calculateWPM();
             
@@ -171,6 +240,10 @@ function endTest() {
     messageElement.textContent = message;
     textDisplay.innerHTML = '';
     textDisplay.appendChild(messageElement);
+
+    // Save score to history
+    const accuracy = typedEntries > 0 ? Math.round(((typedEntries - mistakes) / typedEntries) * 100) : 100;
+    saveScore(wpm, accuracy, `${typedEntries - mistakes}/${typedEntries}`);
 }
 
 /**
@@ -185,14 +258,14 @@ function calculateWPM() {
     if (timeElapsed > 0) {
         // Characters / 5 is the standard "word" length
         wpm = Math.round((adjustedChars / 5) / timeElapsed);
-        wpmDisplay.textContent = wpm;
+        updateStats(wpm, 'wpm');
         
         // Calculate accuracy
         const accuracy = typedEntries > 0 ? Math.round(((typedEntries - mistakes) / typedEntries) * 100) : 100;
-        accuracyDisplay.textContent = `${accuracy}%`;
+        updateStats(`${accuracy}%`, 'accuracy');
         
         // Update characters display
-        charactersDisplay.textContent = `${adjustedChars}/${typedEntries}`;
+        updateStats(`${adjustedChars}/${typedEntries}`, 'characters');
     }
 }
 
@@ -324,7 +397,19 @@ timeOptions.addEventListener('change', () => {
 window.addEventListener('load', () => {
     initTest();
     textInput.focus();
+    updateHistoryDisplay();
 });
 
 // Handle responsive caret positioning
 window.addEventListener('resize', updateCaret);
+
+/**
+ * Enhanced Stats Display
+ */
+function updateStats(value, elementId) {
+    const element = document.getElementById(elementId);
+    element.textContent = value;
+    element.classList.remove('animate');
+    void element.offsetWidth; // Trigger reflow
+    element.classList.add('animate');
+}
