@@ -39,7 +39,7 @@ let testActive = false;
 let charIndex = 0;
 let mistakes = 0;
 let wpm = 0;
-let selectedTime = parseInt(timeOptions.value);
+let selectedTime = 15; // Change this line near the top of your state variables
 let testText = [];
 let typedEntries = 0;
 
@@ -56,7 +56,7 @@ function initTest() {
     wpmDisplay.textContent = '0';
     accuracyDisplay.textContent = '100%';
     charactersDisplay.textContent = '0/0';
-    timeLeft = selectedTime;
+    timeLeft = 15; // Change this to 15
     counter.textContent = timeLeft;
 
     // Generate random text for testing

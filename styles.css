@@ -214,7 +214,60 @@ body {
     display: none;
 }
 
+.logo-section {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    margin-bottom: 1rem;
+    padding: 0.5rem;
+}
+
+.logo {
+    height: 90px;
+    width: auto;
+    filter: drop-shadow(0 0 10px rgba(100, 255, 218, 0.4));
+    transition: transform 0.3s ease;
+}
+
+.logo:hover {
+    transform: scale(1.05);
+}
+
+.header-text {
+    display: flex;
+    align-items: center;
+}
+
+.brand-name {
+    font-size: 3.5rem;
+    font-weight: 700;
+    color: var(--text-color);
+    margin: 0;
+    text-shadow: 0 0 20px rgba(100, 255, 218, 0.2);
+}
+
+.subtitle {
+    font-size: 2.2rem;
+    color: var(--accent-color);
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    margin: 0;
+}
+
+/* Add responsive styles */
 @media (max-width: 768px) {
+    .logo {
+        height: 70px;
+    }
+    
+    .brand-name {
+        font-size: 2rem;
+    }
+
+    .subtitle {
+        font-size: 1.8rem;
+    }
+
     .text-display {
         font-size: 1.2rem;
         line-height: 2rem;
