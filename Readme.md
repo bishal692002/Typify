@@ -22,8 +22,8 @@ A sleek, modern typing test application built with vanilla JavaScript that helps
 
 1. Clone the repository:
 ```bash
-git clone https://github.com/yourusername/typify.git
-cd typify
+git clone https://github.com/bishal692002/Typify.git
+
 ```
 
 2. Open `index.html` in your browser or use a local server:
@@ -72,9 +72,6 @@ Contributions are welcome! Feel free to:
 4. Push to the branch
 5. Open a Pull Request
 
-## 📜 License
-
-This project is open source and available under the [MIT License](LICENSE).
 
 ## 🙏 Acknowledgments
 
