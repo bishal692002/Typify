@@ -26,6 +26,7 @@ const accuracyDisplay = document.getElementById('accuracy');
 const charactersDisplay = document.getElementById('characters');
 const restartBtn = document.querySelector('.restart-btn');
 const timeOptions = document.querySelector('.time-options');
+const modeOptions = document.querySelector('.mode-options');
 const testArea = document.querySelector('.test-area');
 const focusMessage = document.querySelector('.focus-message');
 const caret = document.querySelector('.caret');
@@ -39,7 +40,8 @@ let testActive = false;
 let charIndex = 0;
 let mistakes = 0;
 let wpm = 0;
-let selectedTime = 15; // Change this line near the top of your state variables
+let selectedTime = 15;
+let selectedMode = 'easy';
 let testText = [];
 let typedEntries = 0;
 
@@ -119,24 +121,13 @@ function initTest() {
     wpmDisplay.textContent = '0';
     accuracyDisplay.textContent = '100%';
     charactersDisplay.textContent = '0/0';
-    timeLeft = 15; // Change this to 15
+    timeLeft = selectedTime;
     counter.textContent = timeLeft;
-
-    // Generate random text for testing
     generateRandomText();
-    
-    // Display the text
     displayText();
-    
-    // Hide restart button
     restartBtn.style.display = 'none';
-    
-    // Show focus message
     focusMessage.style.display = 'block';
-
-    // Reset input
     textInput.value = '';
-
     progressBar.style.width = '0%';
     updateHistoryDisplay();
 }
@@ -146,9 +137,25 @@ function initTest() {
  * Creates an array of 100 randomly selected common words
  */
 function generateRandomText() {
+    const wordCount = Math.floor(Math.random() * 11) + 60; // 60-70 words
+    if (selectedMode === 'advanced') {
+        fetch(`https://random-word-api.herokuapp.com/word?number=${wordCount}`)
+            .then(response => response.json())
+            .then(words => {
+                testText = words;
+                displayText();
+            })
+            .catch(() => {
+                testText = [];
+                for (let i = 0; i < wordCount; i++) {
+                    testText.push(commonWords[Math.floor(Math.random() * commonWords.length)]);
+                }
+                displayText();
+            });
+        return;
+    }
     testText = [];
-    // Generate about 100 words (more than enough for most tests)
-    for (let i = 0; i < 100; i++) {
+    for (let i = 0; i < wordCount; i++) {
         testText.push(commonWords[Math.floor(Math.random() * commonWords.length)]);
     }
 }
@@ -363,6 +370,17 @@ textInput.addEventListener('input', e => {
         if (charIndex < allChars.length) {
             allChars[charIndex].classList.add('active');
             updateCaret();
+        } else {
+            // When all words are completed, clear display and load new words
+            generateRandomText();
+            setTimeout(() => {
+                charIndex = 0;
+                const allCharsNew = textDisplay.querySelectorAll('.char');
+                if (allCharsNew[charIndex]) {
+                    allCharsNew[charIndex].classList.add('active');
+                    updateCaret();
+                }
+            }, 100);
         }
         
         calculateWPM();
@@ -391,10 +409,17 @@ timeOptions.addEventListener('change', () => {
     initTest();
 });
 
+modeOptions.addEventListener('change', () => {
+    selectedMode = modeOptions.value;
+    initTest();
+});
+
 /**
  * Initialization
  */
 window.addEventListener('load', () => {
+    selectedTime = parseInt(timeOptions.value);
+    selectedMode = modeOptions.value;
     initTest();
     textInput.focus();
     updateHistoryDisplay();

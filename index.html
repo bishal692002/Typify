@@ -25,12 +25,20 @@
                     </label>
                     <i class="fas fa-sun"></i>
                 </div>
-                <select class="time-options">
-                    <option value="15" selected>15s</option>
-                    <option value="30">30s</option>
-                    <option value="60">1m</option>
-                    <option value="120">2m</option>
-                </select>
+                <div class="select-group">
+                    <label for="time-options" class="time-label">Time:</label>
+                    <select class="time-options" id="time-options">
+                        <option value="15" selected>15s</option>
+                        <option value="30">30s</option>
+                        <option value="60">1m</option>
+                        <option value="120">2m</option>
+                    </select>
+                    <label for="mode-select" class="mode-label">Difficulty:</label>
+                    <select class="mode-options" id="mode-select">
+                        <option value="easy" selected>Easy</option>
+                        <option value="advanced">Advanced</option>
+                    </select>
+                </div>
             </div>
         </header>
 

@@ -134,23 +134,59 @@ input:checked + .slider:before {
     transform: translateX(26px);
 }
 
-.time-options {
-    padding: 0.75rem 1.5rem;
+.select-group {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
     background: var(--glass-bg);
-    border: 1px solid var(--glass-border);
+    border-radius: 1rem;
+    padding: 0.25rem 1rem;
+}
+
+.time-options, .mode-options {
+    padding: 0.75rem 1.5rem;
+    background: var(--secondary-bg);
+    border: 1.5px solid var(--accent-color);
     color: var(--text-color);
     border-radius: 1rem;
     cursor: pointer;
     font-family: var(--font-display);
     font-size: 1rem;
     font-weight: 500;
-    backdrop-filter: blur(10px);
-    transition: all 0.3s ease;
+    transition: all 0.3s;
+    margin-right: 0;
+    appearance: none;
+    box-shadow: none;
+    outline: none;
+    min-width: 90px;
+    /* Custom arrow */
+    background-image: url("data:image/svg+xml;utf8,<svg fill='white' height='16' viewBox='0 0 24 24' width='16' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/></svg>");
+    background-repeat: no-repeat;
+    background-position: right 1rem center;
+    background-size: 1.2em;
 }
 
-.time-options:hover {
+[data-theme="light"] .time-options, [data-theme="light"] .mode-options {
+    background-image: url("data:image/svg+xml;utf8,<svg fill='black' height='16' viewBox='0 0 24 24' width='16' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/></svg>");
+}
+
+.time-options:focus, .mode-options:focus {
+    outline: none;
     border-color: var(--accent-color);
-    box-shadow: 0 0 15px rgba(139, 92, 246, 0.3);
+    box-shadow: 0 0 0 2px var(--accent-color);
+}
+
+.time-options option, .mode-options option {
+    background: var(--bg-color);
+    color: var(--text-color);
+}
+
+.mode-label, .time-label {
+    color: var(--text-color);
+    font-size: 1rem;
+    font-family: var(--font-display);
+    font-weight: 500;
+    margin-right: 0.5rem;
 }
 
 .test-area {
