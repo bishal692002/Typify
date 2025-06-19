@@ -523,3 +523,19 @@ input:checked + .slider:before {
 
 /* Add new font import */
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;600&family=Roboto:wght@400;500;700&display=swap');
+/* filepath: z:\typing\styles.css */
+.bottom-restart-btn {
+    display: block;
+    margin: 20px auto 0 auto;
+    padding: 8px 24px;
+    font-size: 1rem;
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+.bottom-restart-btn:hover {
+    background: var(--accent-hover, #005fa3);
+}

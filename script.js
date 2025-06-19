@@ -12,7 +12,20 @@ const commonWords = [
     "people", "into", "year", "your", "good", "some", "could", "them", "see", "other", 
     "than", "then", "now", "look", "only", "come", "its", "over", "think", "also", 
     "back", "after", "use", "two", "how", "our", "work", "first", "well", "way", 
-    "even", "new", "want", "because", "any", "these", "give", "day", "most", "us"
+    "even", "new", "want", "because", "any", "these", "give", "day", "most", "us",
+    // Add more common words below
+    "man", "find", "here", "thing", "give", "many", "well", "life", "child", "world",
+    "school", "state", "family", "student", "group", "country", "problem", "hand",
+    "part", "place", "case", "week", "company", "system", "program", "question",
+    "work", "government", "number", "night", "point", "home", "water", "room",
+    "mother", "area", "money", "story", "fact", "month", "lot", "right", "study",
+    "book", "eye", "job", "word", "business", "issue", "side", "kind", "head",
+    "house", "service", "friend", "father", "power", "hour", "game", "line",
+    "end", "member", "law", "car", "city", "community", "name", "president",
+    "team", "minute", "idea", "kid", "body", "information", "back", "parent",
+    "face", "others", "level", "office", "door", "health", "person", "art",
+    "war", "history", "party", "result", "change", "morning", "reason", "research",
+    "girl", "guy", "moment", "air", "teacher", "force", "education"
 ];
 
 /**
@@ -25,6 +38,7 @@ const wpmDisplay = document.getElementById('wpm');
 const accuracyDisplay = document.getElementById('accuracy');
 const charactersDisplay = document.getElementById('characters');
 const restartBtn = document.querySelector('.restart-btn');
+const bottomRestartBtn = document.querySelector('.bottom-restart-btn');
 const timeOptions = document.querySelector('.time-options');
 const modeOptions = document.querySelector('.mode-options');
 const testArea = document.querySelector('.test-area');
@@ -138,26 +152,43 @@ function initTest() {
  */
 function generateRandomText() {
     const wordCount = Math.floor(Math.random() * 11) + 60; // 60-70 words
+    
+    // Advanced word list for fallback
+    const advancedWords = [
+        "cryptocurrency", "pharmaceutical", "infrastructure", "sophisticated", 
+        "determination", "revolutionary", "environmental", "classification",
+        "international", "collaboration", "Mediterranean", "technological",
+        "professional", "organization", "understanding", "development",
+        "opportunity", "competition", "independent", "experience"
+    ];
+
     if (selectedMode === 'advanced') {
-        fetch(`https://random-word-api.herokuapp.com/word?number=${wordCount}`)
-            .then(response => response.json())
+        fetch('https://api.wordnik.com/v4/words.json/randomWords?hasDictionaryDef=true&minCorpusCount=1000&minLength=5&maxLength=15&limit=' + wordCount + 'yxq6egny203wqdguexvhs2qw13gyr32cva3xgf7bynvwky2u9')
+            .then(response => {
+                if (!response.ok) throw new Error('API failed');
+                return response.json();
+            })
             .then(words => {
-                testText = words;
+                testText = words.map(word => word.word);
                 displayText();
             })
             .catch(() => {
+                // Fallback for advanced mode
                 testText = [];
                 for (let i = 0; i < wordCount; i++) {
-                    testText.push(commonWords[Math.floor(Math.random() * commonWords.length)]);
+                    testText.push(advancedWords[Math.floor(Math.random() * advancedWords.length)]);
                 }
                 displayText();
             });
         return;
     }
+
+    // Easy mode - using common words
     testText = [];
     for (let i = 0; i < wordCount; i++) {
         testText.push(commonWords[Math.floor(Math.random() * commonWords.length)]);
     }
+    displayText();
 }
 
 /**
@@ -403,6 +434,7 @@ textInput.addEventListener('blur', () => {
 });
 
 restartBtn.addEventListener('click', initTest);
+bottomRestartBtn.addEventListener('click', initTest);
 
 timeOptions.addEventListener('change', () => {
     selectedTime = parseInt(timeOptions.value);
